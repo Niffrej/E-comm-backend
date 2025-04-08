@@ -39,18 +39,28 @@ class UserController extends Controller
         return $req->user();
     }
 
-    function updateUser(Request $req)
+    function updateUser(Request $req, $id)
     {
-        $user = $req->user();
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+        
         $user->name = $req->name;
         $user->email = $req->email;
         $user->save();
+        
+        return response()->json(['message' => 'User updated successfully', 'user' => $user]);
     }
 
-    function deleteUser(Request $req)
+    function deleteUser($id)
     {
-        $user = $req->user();
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
         $user->delete();
+        return response()->json(['message' => 'User deleted successfully']);
     }
 
     function getUsers()
