@@ -27,5 +27,50 @@ class UserController extends Controller
         }
         return $user;
     }
+
+    function logout(Request $req)
+    {
+        $req->user()->tokens()->delete();
+        return ["message" => "Logged out"];
+    }
+
+    function getUser(Request $req)
+    {
+        return $req->user();
+    }
+
+    function updateUser(Request $req)
+    {
+        $user = $req->user();
+        $user->name = $req->name;
+        $user->email = $req->email;
+        $user->save();
+    }
+
+    function deleteUser(Request $req)
+    {
+        $user = $req->user();
+        $user->delete();
+    }
+
+    function getUsers()
+    {
+        return User::all();
+    }
+
+    function getUserById($id)
+    {
+        return User::find($id);
+    }
+
+    function getUserByEmail($email)
+    {
+        return User::where('email', $email)->first();
+    }
+
+    function getUserByName($name)
+    {
+        return User::where('name', $name)->first();
+    }
 }
 
